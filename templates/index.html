@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Match AI</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🤖 Resume Match AI</h1>
+    <p class="subtitle">
+        AI Powered Resume & Job Description Analyzer
+    </p>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <label>Upload Resume (PDF)</label>
+
+        <input type="file"
+               name="resume"
+               accept=".pdf"
+               required>
+
+        <label>Paste Job Description</label>
+
+        <textarea
+            name="job_description"
+            rows="8"
+            placeholder="Paste the job description here..."
+            required></textarea>
+
+        <button type="submit">
+            Analyze Resume
+        </button>
+
+    </form>
+
+    {% if score is defined %}
+
+    <div class="results">
+
+        <h2>Resume Match Score</h2>
+
+        <div class="progress">
+
+            <div class="progress-bar"
+                 style="width: {{ score }}%;">
+                {{ score }}%
+            </div>
+
+        </div>
+
+        {% if score >= 75 %}
+            <p class="good">Excellent Match 🎉</p>
+
+        {% elif score >= 50 %}
+            <p class="average">Good Match 👍</p>
+
+        {% else %}
+            <p class="bad">Low Match. Resume needs improvement.</p>
+        {% endif %}
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>✅ Matched Skills</h3>
+
+                {% if matched %}
+                    <ul>
+                    {% for skill in matched %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No matching skills found.</p>
+                {% endif %}
+
+            </div>
+
+            <div class="card">
+
+                <h3>❌ Missing Skills</h3>
+
+                {% if missing %}
+                    <ul>
+                    {% for skill in missing %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No missing skills.</p>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <div class="recommendation">
+
+            <h3>💡 AI Recommendation</h3>
+
+            <p>{{ recommendation }}</p>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
